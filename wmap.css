@@ -1,0 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-family: "游ゴシック", YuGothic, "ヒラギノ角ゴ Pro", "Hiragino Kaku Gothic Pro", "メイリオ", "Meiryo", sans-serif;
+}
+
+#map {
+    flex: 1;
+    width: 100%;
+}
+
+.time-ctrl {
+    display: flex;
+    flex-direction: row;
+    height: -moz-fit-content;
+    height: -webkit-fit-content;
+}
+
+.time-ctrl .date-pane {
+    padding: 1rem 0.5rem 0;
+    line-height: 2rem;
+}
+
+.time-ctrl .time-pane {
+    line-height: 5rem;
+}
+
+.time-ctrl .head-list {
+    display: inline-block;
+    width: -moz-fit-content;
+    width: -webkit-fit-content;
+}
+
+.time-ctrl .head-item {
+    display: inline-block;
+    width: 12rem;
+    border: 1px solid transparent;
+    text-align: center;    
+    cursor: pointer;
+}
+
+.time-ctrl .head-item:nth-child(2n) {
+    background: #E0E0E0;
+}
+
+.time-ctrl .head-item .date-pane {
+    font-size: medium;
+}
+
+.time-ctrl .head-item .time-pane {
+    font-size: xx-large;
+    font-weight: bold;
+    vertical-align: bottom;
+}
+
+.time-ctrl .datetime-list {
+    display: inline-block;
+    flex: 1;
+    overflow: scroll;
+    white-space: nowrap;
+}
+
+.time-ctrl .datetime-list .date-item {
+    display: inline-block;
+}
+
+.time-ctrl .datetime-list .date-pane {
+    border: 1px solid transparent;
+    font-size: small;
+    pointer-events: none;
+}
+
+.time-ctrl .datetime-list .date-item:nth-child(2n) {
+    background: #E0E0E0;
+}
+
+.time-ctrl .datetime-list .date-item.wday0 {
+    background: #FFE0E0;
+}
+
+.time-ctrl .datetime-list .date-item.wday6 {
+    background: #D0E0FF;
+}
+
+.time-ctrl .datetime-list .time-list {
+    display: flex;
+}
+
+.time-ctrl .datetime-list .time-item {
+    display: inline-block;
+    margin-top: calc(-3rem - 2px);
+    cursor: pointer;
+}
+
+.time-ctrl .datetime-list .time-pane {
+    margin-top: 3rem;
+    border: 1px solid transparent;
+    width: 4rem;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    vertical-align: bottom;
+}
+
+.time-ctrl .datetime-list .time-item:last-child {
+    flex: 1;
+}
+
+.time-ctrl .datetime-list .time-item:last-child .time-pane {
+    width: auto;
+    min-width: 4rem;
+}
+
+.time-ctrl .datetime-list .time-pane .colon,
+.time-ctrl .datetime-list .time-pane .minute {
+    display: none;
+}
+
+.time-ctrl .head-item.active,
+.time-ctrl .datetime-list .date-item.active .date-pane,
+.time-ctrl .datetime-list .time-item.active .time-pane {
+    border: 1px solid #0000FF;
+    background: #C0C0FF;
+}
+
+.time-ctrl .datetime-list .time-item.active .time-pane {
+    border-top: 1px solid transparent;
+}
