@@ -58,79 +58,72 @@ body {
 .time-ctrl .head-item .time-pane {
     font-size: xx-large;
     font-weight: bold;
-    vertical-align: bottom;
 }
 
-.time-ctrl .datetime-list {
+.time-ctrl .date-list {
     display: inline-block;
     flex: 1;
-    overflow-x: scroll;
+    overflow-x: auto;
     white-space: nowrap;
 }
 
-.time-ctrl .datetime-list .date-item {
+.time-ctrl .date-item {
     display: inline-block;
 }
 
-.time-ctrl .datetime-list .date-pane {
+.time-ctrl .date-item:nth-child(2n) {
+    background: #E0E0E0;
+}
+
+.time-ctrl .date-item.wday0 {
+    background: #FFE0E0;
+}
+
+.time-ctrl .date-item.wday6 {
+    background: #D0E0FF;
+}
+
+.time-ctrl .date-item .date-pane {
     border: 1px solid transparent;
     font-size: small;
     pointer-events: none;
 }
 
-.time-ctrl .datetime-list .date-item:nth-child(2n) {
-    background: #E0E0E0;
-}
-
-.time-ctrl .datetime-list .date-item.wday0 {
-    background: #FFE0E0;
-}
-
-.time-ctrl .datetime-list .date-item.wday6 {
-    background: #D0E0FF;
-}
-
-.time-ctrl .datetime-list .time-list {
+.time-ctrl .date-item .time-list {
     display: flex;
 }
 
-.time-ctrl .datetime-list .time-item {
+.time-ctrl .date-item .time-item {
     display: inline-block;
     margin-top: calc(-3rem - 2px);
+    padding-top: 3rem;
     cursor: pointer;
 }
 
-.time-ctrl .datetime-list .time-pane {
-    margin-top: 3rem;
+.time-ctrl .date-item .time-item .time-pane {
     border: 1px solid transparent;
     width: 4rem;
     text-align: center;
     font-size: large;
     font-weight: bold;
-    vertical-align: bottom;
 }
 
-.time-ctrl .datetime-list .time-item:last-child {
+.time-ctrl .date-item .time-item:last-child {
     flex: 1;
 }
 
-.time-ctrl .datetime-list .time-item:last-child .time-pane {
+.time-ctrl .date-item .time-item:last-child .time-pane {
     width: auto;
     min-width: 4rem;
 }
 
-.time-ctrl .datetime-list .time-pane .colon,
-.time-ctrl .datetime-list .time-pane .minute {
-    display: none;
-}
-
-.time-ctrl .head-item.active,
-.time-ctrl .datetime-list .date-item.active .date-pane,
-.time-ctrl .datetime-list .time-item.active .time-pane {
+.time-ctrl .head-item.selected,
+.time-ctrl .date-item.selected .date-pane,
+.time-ctrl .date-item .time-item.selected .time-pane {
     border: 1px solid #0000FF;
     background: #C0C0FF;
 }
 
-.time-ctrl .datetime-list .time-item.active .time-pane {
+.time-ctrl .date-item .time-item.selected .time-pane {
     border-top: 1px solid transparent;
 }

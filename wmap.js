@@ -2,7 +2,6 @@
 	var GOOGLE_API_KEY = "AIzaSyDqaaheRj_KJ_AOw01eERIOP05wxtC-LWE";
 	var OWM_API_KEY = "abb2876a6efb2b081ce45f87ec99198e";
 
-	var JQUERY_UI_JS = "http://code.jquery.com/ui/1.12.1/jquery-ui.min.js";
 	var GOOGLE_MAP_JS = 
 		"https://maps.googleapis.com/maps/api/js?key=" + GOOGLE_API_KEY;
 	var GEOCODING_API = "https://maps.googleapis.com/maps/api/geocode/json";
@@ -14,7 +13,7 @@
 	var WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"];
 	var NUM_TICKS = 40;
 
-	var g = {data: {}, markers: {}, activeTime: null};
+	var g = {data: {}, markers: {}, selectedTime: null};
 
 	function padZero(x) {
 		return x < 10 ? "0" + x : x;
@@ -47,29 +46,18 @@
 	}
 
 	function createDatePane(t) {
-		var date = $("<span>").addClass("date")
-			.append($("<span>").addClass("month").text(t.getMonth() + 1))
-			.append("月")
-			.append($("<span>").addClass("mday").text(t.getDate()))
-			.append("日");
-		var weekday = $("<span>").addClass("weekday")
-			.append("(")
-			.append($("<span>").addClass("wday").text(WEEKDAY_LABELS[t.getDay()]))
-			.append(")");
+		var wd = WEEKDAY_LABELS[t.getDay()];
 		return $("<div>").addClass("date-pane")
-			.append(date).append(weekday);
+			.text((t.getMonth() + 1) + "月" + t.getDate() + "日(" + wd + ")");
 	}
 
-	function createTimePane(t) {
-		var time = $("<span>").addClass("time")
-			.append($("<span>").addClass("hour").text(t.getHours()))
-			.append($("<span>").addClass("colon").text(":"))
-			.append($("<span>").addClass("minute").text(padZero(t.getMinutes())));
-		return $("<div>").addClass("time-pane").append(time);
+	function createTimePane(t, min) {
+		return $("<div>").addClass("time-pane")
+			.text(t.getHours() + (min ? ":" + padZero(t.getMinutes()) : ""));
 	}
 
 	function updateMarker(cityId) {
-		var t = g.activeTime.getTime() / 1000;
+		var t = g.selectedTime.getTime() / 1000;
 		var targets = g.data[cityId].list.filter(function(e) {return e.dt == t;});
 		var iconId = targets.length >= 1 ? targets[0].weather[0].icon : "q";
 		g.markers[cityId].setIcon({
@@ -79,18 +67,18 @@
 		});
 	}
 
-	function setActiveTime(elem) {
+	function setSelectedTime(elem) {
 		var t = new Date(elem.data("timestamp"));
-		g.activeTime = t;
+		g.selectedTime = t;
 
-		// Update active status in DOM
+		// Update selected status in DOM
 		$(".head-list .head-item")
-			.add(".datetime-list .date-item")
-			.add(".datetime-list .time-item")
-			.removeClass("active");
-		elem.add(elem.parents(".date-item")).addClass("active");
+			.add(".date-list .date-item")
+			.add(".time-list .time-item")
+			.removeClass("selected");
+		elem.add(elem.parents(".date-item")).addClass("selected");
 
-		// Update markers
+		// Update all markers
 		for (var cityId in g.data) {
 			updateMarker(cityId);
 		}
@@ -112,13 +100,13 @@
 		for (var i = 0; i < 2; ++i) {
 			var t = getHeadTime(now, i);
 			$("<div>").addClass("head-item")
-				.append(createDatePane(t)).append(createTimePane(t))
+				.append(createDatePane(t)).append(createTimePane(t, true))
 				.data("timestamp", t.getTime()).click(onTimeButtonClicked)
 				.appendTo(headList);
 		}
 
 		// Set up tick items
-		var tickList = $(".datetime-list");
+		var dateList = $(".date-list");
 		var timeList = null;
 		for (var i = 0; i < NUM_TICKS; ++i) {
 			var t = getTickTime(now, i);
@@ -128,16 +116,16 @@
 					.addClass("wday" + t.getDay())
 					.append(createDatePane(t))
 					.append(timeList)
-					.appendTo(tickList);
+					.appendTo(dateList);
 			}
 			$("<div>").addClass("time-item")
 				.data("timestamp", t.getTime()).click(onTimeButtonClicked)
-				.append(createTimePane(t))
+				.append(createTimePane(t, false))
 				.appendTo(timeList);
 		}
 
-		// Set activeTime to head0
-		setActiveTime($(".head-list .head-item:first"));
+		// Set selectedTime to first head
+		setSelectedTime($(".head-list .head-item:first"));
 	}
 
 	function onMapClicked(event) {
@@ -160,7 +148,7 @@
 	}
 
 	function onTimeButtonClicked(event) {
-		setActiveTime($(this));
+		setSelectedTime($(this));
 	}
 
 	$(document).ready(function() {
