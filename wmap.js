@@ -1,7 +1,6 @@
 (function($) {
 	var GOOGLE_API_KEY = "AIzaSyDqaaheRj_KJ_AOw01eERIOP05wxtC-LWE";
-	var GOOGLE_MAP_JS = 
-		"https://maps.googleapis.com/maps/api/js?key=" + GOOGLE_API_KEY;
+	var GOOGLE_MAP_JS = "https://maps.googleapis.com/maps/api/js";
 
 	var OWM_API_KEY = "abb2876a6efb2b081ce45f87ec99198e";
 	var OWM_FORCAST_API = "http://api.openweathermap.org/data/2.5/forecast";
@@ -13,7 +12,7 @@
 	var ICON_SIZE = 80;
 	var NUM_TICKS = 40;
 
-	var g = {data: {}, markers: {}, selectedElem: null};
+	var g = {data: {}, markers: {}, selectedDateTimeElem: null};
 
 	function padZero(x) {
 		return x < 10 ? "0" + x : x;
@@ -53,7 +52,7 @@
 	}
 
 	function updateMarker(cityId) {
-		var t = g.selectedElem.data("timestamp") / 1000;
+		var t = g.selectedDateTimeElem.data("timestamp") / 1000;
 		var targets = g.data[cityId].list.filter(function(e) {return e.dt == t;});
 		var iconId = targets.length >= 1 ? targets[0].weather[0].icon : "q";
 		g.markers[cityId].setIcon({
@@ -64,19 +63,15 @@
 	}
 
 	function updateScrollPosition(anim) {
-		var currentLeft = g.selectedElem.position().left;
-		var preferredLeft = $(".datetime-spacer").width();
-		if (currentLeft != preferredLeft) {
-			var ctrl = $(".datetime-ctrl");
-			var targetLeft = ctrl.scrollLeft() + currentLeft - preferredLeft;
-			ctrl.animate({scrollLeft: targetLeft});
-		}
+		var itemWidth = $(".datetime-item:not(.selected)").outerWidth();
+		var index = $(".datetime-item").index(g.selectedDateTimeElem);
+		$(".datetime-ctrl").stop(true).animate({scrollLeft: index * itemWidth});
 	}
 
-	function setSelectedElem(elem) {
-		if (g.selectedElem == elem) return;
-		var prevElem = g.selectedElem;
-		g.selectedElem = elem;
+	function setSelectedDateTimeElem(elem) {
+		if (g.selectedDateTimeElem == elem) return;
+		var prevElem = g.selectedDateTimeElem;
+		g.selectedDateTimeElem = elem;
 
 		// Update selected status in DOM
 		if (prevElem != null) prevElem.removeClass("selected");
@@ -118,7 +113,7 @@
 		$("<div>").addClass("datetime-spacer").appendTo(ctrl);
 
 		// Set selectedTime to first item
-		setSelectedElem($(".datetime-item:first"));
+		setSelectedDateTimeElem($(".datetime-item:first"));
 		updateScrollPosition(true);
 	}
 
@@ -142,22 +137,21 @@
 	}
 
 	function onDateTimeItemClicked(event) {
-		setSelectedElem($(this));
+		setSelectedDateTimeElem($(this));
 		updateScrollPosition(true);
 	}
 
 	function onControlScrolled(event) {
 		var ctrl = $(".datetime-ctrl");
 		if (ctrl.is(":animated")) return;
-		
 		var itemWidth = $(".datetime-item:not(.selected)").outerWidth();
-		var index = Math.floor(ctrl.scrollLeft() / itemWidth);
-		setSelectedElem($($(".datetime-item")[index]));
+		var index = Math.floor(ctrl.scrollLeft() / itemWidth + 0.5);
+		setSelectedDateTimeElem($($(".datetime-item")[index]));
 	}
 
 	$(document).ready(function() {
 		$(".datetime-ctrl").scroll(onControlScrolled);
-		$.when($.getScript(GOOGLE_MAP_JS))
+		$.when($.getScript(GOOGLE_MAP_JS + "?key=" + GOOGLE_API_KEY))
 			.then(getCurrentPosition)
 			.then(
 				function(pos) {g.pos = pos;},

@@ -47,7 +47,7 @@ body {
 }
 
 .datetime-item.selected {
-    border: 2px solid #FFC080;
+    border-color: #FFC080;
     width: 12rem;
     background: #FFF0E0;
 }
