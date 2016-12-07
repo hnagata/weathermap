@@ -26,16 +26,16 @@ body {
     display: inline-block;
 }
 
+.date-item:nth-child(2n) {
+    background: #E0E0E0;
+}
+
 .date-item.wday0 {
     background: #FFE0E0;
 }
 
 .date-item.wday6 {
     background: #D0E0FF;
-}
-
-.date-item:nth-child(2n) {
-    background: #E0E0E0;
 }
 
 .datetime-item {
