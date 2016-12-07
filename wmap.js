@@ -125,15 +125,20 @@
 			var cityId = data.city.id;
 			if (!(cityId in g.data)) {
 				g.data[cityId] = data;
-				g.markers[cityId] = new google.maps.Marker({
+				var marker = g.markers[cityId] = new google.maps.Marker({
 					position: {lat: data.city.coord.lat, lng: data.city.coord.lon},
 					map: g.map,
 				});
+				marker.addListener("click", function() {onMarkerClicked(cityId);});
 			}
 			updateMarker(cityId);
 		}, function(error) {
 			console.log(error);
 		});
+	}
+
+	function onMarkerClicked(cityId) {
+		g.markers[cityId].setMap(null);
 	}
 
 	function onDateTimeItemClicked(event) {
