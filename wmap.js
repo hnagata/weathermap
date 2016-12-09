@@ -12,7 +12,7 @@
 	var ICON_SIZE = 80;
 	var NUM_TICKS = 40;
 
-	var g = {data: {}, markers: {}, selectedDateTimeElem: null};
+	var g = {data: {}, markers: {}, selectedDateTimeItem: $()};
 
 	function padZero(x) {
 		return x < 10 ? "0" + x : x;
@@ -52,7 +52,7 @@
 	}
 
 	function updateMarker(cityId) {
-		var t = g.selectedDateTimeElem.data("timestamp") / 1000;
+		var t = g.selectedDateTimeItem.data("timestamp") / 1000;
 		var targets = g.data[cityId].list.filter(function(e) {return e.dt == t;});
 		var iconId = targets.length >= 1 ? targets[0].weather[0].icon : "q";
 		g.markers[cityId].setIcon({
@@ -64,18 +64,18 @@
 
 	function updateScrollPosition(anim) {
 		var itemWidth = $(".datetime-item:not(.selected)").outerWidth();
-		var index = $(".datetime-item").index(g.selectedDateTimeElem);
+		var index = $(".datetime-item").index(g.selectedDateTimeItem);
 		$(".datetime-ctrl").stop(true).animate({scrollLeft: index * itemWidth});
 	}
 
-	function setSelectedDateTimeElem(elem) {
-		if (g.selectedDateTimeElem == elem) return;
-		var prevElem = g.selectedDateTimeElem;
-		g.selectedDateTimeElem = elem;
+	function setSelectedDateTimeItem(item) {
+		if (g.selectedDateTimeItem == item) return;
+		var prevItem = g.selectedDateTimeItem;
+		g.selectedDateTimeItem = item;
 
 		// Update selected status in DOM
-		if (prevElem != null) prevElem.removeClass("selected");
-		elem.addClass("selected");
+		prevItem.removeClass("selected");
+		item.addClass("selected");
 
 		// Update all markers
 		for (var cityId in g.data) {
@@ -113,7 +113,7 @@
 		$("<div>").addClass("datetime-spacer").appendTo(ctrl);
 
 		// Set selectedTime to first item
-		setSelectedDateTimeElem($(".datetime-item:first"));
+		setSelectedDateTimeItem($(".datetime-item:first"));
 		updateScrollPosition(true);
 	}
 
@@ -142,7 +142,7 @@
 	}
 
 	function onDateTimeItemClicked(event) {
-		setSelectedDateTimeElem($(this));
+		setSelectedDateTimeItem($(this));
 		updateScrollPosition(true);
 	}
 
@@ -151,7 +151,7 @@
 		if (ctrl.is(":animated")) return;
 		var itemWidth = $(".datetime-item:not(.selected)").outerWidth();
 		var index = Math.floor(ctrl.scrollLeft() / itemWidth + 0.5);
-		setSelectedDateTimeElem($($(".datetime-item")[index]));
+		setSelectedDateTimeItem($($(".datetime-item")[index]));
 	}
 
 	$(document).ready(function() {

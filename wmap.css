@@ -47,9 +47,9 @@ body {
 }
 
 .datetime-item.selected {
-    border-color: #FFC080;
+    border-color: #FF8000;
     width: 12rem;
-    background: #FFF0E0;
+    background: #FFE0C0;
 }
 
 .datetime-item .date-pane {
