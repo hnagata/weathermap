@@ -65,7 +65,11 @@
 	function updateScrollPosition(anim) {
 		var itemWidth = $(".datetime-item:not(.selected)").outerWidth();
 		var index = $(".datetime-item").index(g.selectedDateTimeItem);
-		$(".datetime-ctrl").stop(true).animate({scrollLeft: index * itemWidth});
+		if (anim) {
+			$(".datetime-ctrl").stop(true).animate({scrollLeft: index * itemWidth});
+		} else {
+			$(".datetime-ctrl").stop(true).scrollLeft(index * itemWidth);
+		}
 	}
 
 	function setSelectedDateTimeItem(item) {
@@ -114,7 +118,7 @@
 
 		// Set selectedTime to first item
 		setSelectedDateTimeItem($(".datetime-item:first"));
-		updateScrollPosition(true);
+		updateScrollPosition(false);
 	}
 
 	function onMapClicked(event) {
