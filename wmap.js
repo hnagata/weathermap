@@ -10,7 +10,7 @@
 	var WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"];
 	var DEFAULT_MAP_POS = {latitude: 34.802425, longitude: 135.769505};
 	var ICON_SIZE = 80;
-	var NUM_TICKS = 40;
+	var NUM_TICKS = 40, TICK_SPAN = 3;
 
 	var g = {data: {}, markers: {}, selectedDateTimeItem: $()};
 
@@ -18,12 +18,9 @@
 		return x < 10 ? "0" + x : x;
 	}
 
-	function roundTime(t, i, span, off) {
-		return new Date(Math.ceil((t.getTime() - off) / span + i) * span + off);
-	}
-
 	function getTickTime(t, i) {
-		return roundTime(t, i, 3 * 3600 * 1000, 0);
+		var h = (Math.floor(t.getHours() / TICK_SPAN) + i + 1) * TICK_SPAN;
+		return new Date(t.getYear(), t.getMonth(), t.getDate(), h);
 	}
 
 	function getCurrentPosition() {
