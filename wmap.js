@@ -20,7 +20,7 @@
 
 	function getTickTime(t, i) {
 		var h = (Math.floor(t.getHours() / TICK_SPAN) + i + 1) * TICK_SPAN;
-		return new Date(t.getYear(), t.getMonth(), t.getDate(), h);
+		return new Date(t.getFullYear(), t.getMonth(), t.getDate(), h);
 	}
 
 	function getCurrentPosition() {
