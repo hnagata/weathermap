@@ -4,7 +4,7 @@
 
 	var OWM_API_KEY = "abb2876a6efb2b081ce45f87ec99198e";
 	var OWM_FORCAST_API = "http://api.openweathermap.org/data/2.5/forecast";
-
+	
 	var ICON_DIR = "icon/";  // "http://openweathermap.org/img/w/";
 
 	var WEEKDAY_LABELS = ["日", "月", "火", "水", "木", "金", "土"];
@@ -100,7 +100,8 @@
 			center: {lat: g.pos.latitude, lng: g.pos.longitude},
 			zoom: 10,
 			clickableIcons: false,
-			disableDefaultUI: true,
+			mapTypeControl: false,
+			streetViewControl: false
 		});
 		g.map.addListener("click", onMapClicked);
 
@@ -171,7 +172,7 @@
 			.then(getCurrentPosition)
 			.then(
 				function(pos) {g.pos = pos;},
-				function() {g.pos = DEFAULT_MAP_POS})
+				function() {g.pos = DEFAULT_MAP_POS;})
 			.then(init);
 	});
 })(jQuery);
