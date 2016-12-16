@@ -94,7 +94,7 @@ body {
 }
 
 .datetime-item.selected .time-pane .min {
-    display: initial;
+    display: inline;
 } 
 
 .datetime-spacer {
