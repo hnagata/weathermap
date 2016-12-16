@@ -11,10 +11,6 @@
 	var DEFAULT_MAP_POS = {latitude: 34.802425, longitude: 135.769505};
 	var ICON_SIZE = 80;
 	var NUM_TICKS = 40, TICK_SPAN = 3;
-	var ICON_MAP = {
-		501: "09d", 502: "09d", 503: "09d", 504: "09d",
-		520: "10d"
-	};
 
 	var g = {data: {}, markers: {}, selectedDateTimeItem: $()};
 
@@ -29,7 +25,12 @@
 
 	function getIconName(data) {
 		if (data === undefined) return "q";
-		if (data.weather[0].id in ICON_MAP) return ICON_MAP[data.weather[0].id];
+		// Modify icons
+		var wid = data.weather[0].id;
+		if (wid >= 501 && wid <= 504) return "09d";      // Rainy (>= 2.5mm/h)?
+		if (wid == 500 || wid == 520) {                  // Rain/shower (< 2.5mm/h)?
+			return data.clouds.all < 50 ? "10d2" : "10d";  // Clouds rate < 50%?
+		}
 		return data.weather[0].icon;
 	}
 
