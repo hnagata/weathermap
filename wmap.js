@@ -11,6 +11,10 @@
 	var DEFAULT_MAP_POS = {latitude: 34.802425, longitude: 135.769505};
 	var ICON_SIZE = 80;
 	var NUM_TICKS = 40, TICK_SPAN = 3;
+	var ICON_MAP = {
+		501: "09d", 502: "09d", 503: "09d", 504: "09d",
+		520: "10d"
+	};
 
 	var g = {data: {}, markers: {}, selectedDateTimeItem: $()};
 
@@ -21,6 +25,12 @@
 	function getTickTime(t, i) {
 		var h = (Math.floor(t.getHours() / TICK_SPAN) + i + 1) * TICK_SPAN;
 		return new Date(t.getFullYear(), t.getMonth(), t.getDate(), h);
+	}
+
+	function getIconName(data) {
+		if (data === undefined) return "q";
+		if (data.weather[0].id in ICON_MAP) return ICON_MAP[data.weather[0].id];
+		return data.weather[0].icon;
 	}
 
 	function getCurrentPosition() {
@@ -50,10 +60,9 @@
 
 	function updateMarker(cityId) {
 		var t = g.selectedDateTimeItem.data("timestamp") / 1000;
-		var targets = g.data[cityId].list.filter(function(e) {return e.dt == t;});
-		var iconId = targets.length >= 1 ? targets[0].weather[0].icon : "q";
+		var target = g.data[cityId].list.filter(function(e) {return e.dt == t;})[0];
 		g.markers[cityId].setIcon({
-			url: ICON_DIR + iconId + ".png",
+			url: ICON_DIR + getIconName(target) + ".png",
 			scaledSize: new google.maps.Size(ICON_SIZE, ICON_SIZE),
 			anchor: new google.maps.Point(ICON_SIZE / 2, ICON_SIZE / 2)
 		});
