@@ -72,10 +72,11 @@
 	function updateScrollPosition(anim) {
 		var itemWidth = $(".datetime-item:not(.selected)").outerWidth();
 		var index = $(".datetime-item").index(g.selectedDateTimeItem);
+		var ctrl = $(".datetime-ctrl").stop(true);
 		if (anim) {
-			$(".datetime-ctrl").stop(true).animate({scrollLeft: index * itemWidth});
+			ctrl.animate({scrollLeft: index * itemWidth});
 		} else {
-			$(".datetime-ctrl").stop(true).scrollLeft(index * itemWidth);
+			ctrl.scrollLeft(index * itemWidth);
 		}
 	}
 
