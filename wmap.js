@@ -152,6 +152,8 @@
 
 	function onMarkerClicked(cityId) {
 		g.markers[cityId].setMap(null);
+		delete g.data[cityId];
+		delete g.markers[cityId];
 	}
 
 	function onDateTimeItemClicked(event) {
